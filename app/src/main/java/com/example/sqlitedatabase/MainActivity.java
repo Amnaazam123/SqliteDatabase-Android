@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     Button AddButton, ViewAllButton;
@@ -39,13 +42,19 @@ public class MainActivity extends AppCompatActivity {
                 }catch (Exception e){
                     Log.d("error","not run");
                 }
+                DBHelper dbHelper  = new DBHelper(MainActivity.this);
+                dbHelper.addStudent(studentModel);
             }
         });
 
         ViewAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                DBHelper dbHelper = new DBHelper(MainActivity.this);
+                List<StudentModel> list = dbHelper.getAllStudents();
+                ArrayAdapter arrayAdapter = new ArrayAdapter<StudentModel>
+                        (MainActivity.this, android.R.layout.simple_list_item_1,list);
+                listViewStudent.setAdapter(arrayAdapter);
             }
         });
 

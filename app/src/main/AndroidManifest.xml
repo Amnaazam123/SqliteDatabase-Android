@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SqliteDatabase">
         <activity
+            android:name=".DeleteOrEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

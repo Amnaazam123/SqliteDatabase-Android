@@ -6,6 +6,7 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.ContentValues;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String STUDENT_TABLE = "StudentTable";
 
     public DBHelper(@Nullable Context context) {
-        super(context, "MyDB.db", null, 1);
+        super(context, "StudentDB.db", null, 1);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(" + STUDENT_ID + " Integer PRIMARY KEY AUTOINCREMENT, " +
                 STUDENT_NAME + " Text, " +
                 STUDENT_ROLL + " Int, " +
-                STUDENT_ENROLL + " BOOL) ";
+                STUDENT_ENROLL + " TEXT) ";
 
         db.execSQL(createTableSTatement);
     }
@@ -44,9 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //ADD
     public void  addStudent(StudentModel STUDENTModel){
         SQLiteDatabase db = this.getWritableDatabase();         //getting object of Db
-        //Hash map, as we did in bundles
         ContentValues cv = new ContentValues();
-
         cv.put(STUDENT_NAME, STUDENTModel.getName());
         cv.put(STUDENT_ROLL, STUDENTModel.getRollNo());
         cv.put(STUDENT_ENROLL, STUDENTModel.isEnroll());
@@ -60,22 +59,23 @@ public class DBHelper extends SQLiteOpenHelper {
         //else{return true;}
     }
     //Update
-    public void updateStudent(int id, StudentModel STUDENTModel){
+    public void updateStudent(StudentModel STUDENTModel){
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-
         cv.put(STUDENT_NAME, STUDENTModel.getName());
         cv.put(STUDENT_ROLL, STUDENTModel.getRollNo());
         cv.put(STUDENT_ENROLL, STUDENTModel.isEnroll());
+        db.update(STUDENT_TABLE,cv,STUDENT_ID +"=?",
+                new String[]{String.valueOf(STUDENTModel.getID())});
 
-        SQLiteDatabase db = this.getWritableDatabase();         //getting object of Db
-        //Cursor cursorCourses = db.rawQuery("SELECT * FROM " + STUDENT_TABLE, STUDENT_ID:id);
-
+        db.close();
     }
     //Delete
-    public void deleteStudent(int id){
-        SQLiteDatabase db = this.getWritableDatabase();         //getting object of Db
-        //Cursor cursorCourses = db.rawQuery("DELETE FROM " + STUDENT_TABLE, STUDENT_ID==id);
-
+    public void deleteStudent(int id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(STUDENT_TABLE,STUDENT_ID+"=?",new String[]{String.valueOf(id)});
+        db.close();
     }
     //READ
     public ArrayList<StudentModel> getAllStudents() {
@@ -90,9 +90,9 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursorCourses.moveToFirst()) {
             do {
 
-                studentArrayList.add(new StudentModel(cursorCourses.getString(1),
-                        cursorCourses.getInt(2),
-                        cursorCourses.getInt(3) == 1 ? true : false));
+                studentArrayList.add(new StudentModel(cursorCourses.getInt(0), cursorCourses.getString(1),
+                        cursorCourses.getString(2),
+                        cursorCourses.getString(3)));
             } while (cursorCourses.moveToNext());
 
         }
@@ -101,5 +101,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return studentArrayList;
     }
+
 
 }

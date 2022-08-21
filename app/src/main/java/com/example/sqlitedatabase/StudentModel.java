@@ -1,14 +1,37 @@
 package com.example.sqlitedatabase;
 //file>new class
 public class StudentModel {
+    private int ID;
     private String name;
-    private int rollNo;
-    private boolean isEnroll;
+    private String rollNo;
+    private String isEnroll;
 
-    public StudentModel(String name, int rollNo, boolean isEnroll) {
+    @Override
+    public String toString() {
+        return
+                "Name : '" + name + '\'' +
+                ", RollNmber : " + rollNo +
+                ", IsEnroll : " + isEnroll;
+    }
+
+
+    public StudentModel(String name, String rollNo, String isEnroll) {
         this.name = name;
         this.rollNo = rollNo;
         this.isEnroll = isEnroll;
+    }
+    public StudentModel(int id,String name, String rollNo, String isEnroll) {
+        this.ID = id;
+        this.name = name;
+        this.rollNo = rollNo;
+        this.isEnroll = isEnroll;
+    }
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getName() {
@@ -19,19 +42,19 @@ public class StudentModel {
         this.name = name;
     }
 
-    public int getRollNo() {
+    public String getRollNo() {
         return rollNo;
     }
 
-    public void setRollNo(int rollNo) {
+    public void setRollNo(String rollNo) {
         this.rollNo = rollNo;
     }
 
-    public boolean isEnroll() {
+    public String isEnroll() {
         return isEnroll;
     }
 
-    public void setEnroll(boolean enroll) {
+    public void setEnroll(String  enroll) {
         isEnroll = enroll;
     }
 }
